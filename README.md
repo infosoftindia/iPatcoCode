@@ -7,7 +7,7 @@ iPatco Code is a developer friendly free modular open source codebase CMS made w
 Download the latest version of iPatco Code from [Here](https://pip.pypa.io/en/stable/) and run the installation.
 
 ```bash
-http://example.com/**install**
+http://example.com/install
 ```
 
 ## Contributing
