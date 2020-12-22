@@ -6,7 +6,13 @@
 			update_ENV('DbName', $this->input->post('database'));
 			update_ENV('DbUser', $this->input->post('username'));
 			update_ENV('DbPass', $this->input->post('password'));
-			if ($this->db->query('CREATE DATABASE IF NOT EXISTS '.$this->input->post('database'))){
+		}
+		
+		public function save_Site_Config(){
+			$this->load->database();
+			update_ENV('title', $this->input->post('title'));
+			update_ENV('tag', $this->input->post('tag'));
+			if ($this->db->query('CREATE DATABASE IF NOT EXISTS '.getenv('DbName'))){
 				$this->table_Address();
 				$this->table_Blogs();
 				$this->table_Categories();
@@ -23,11 +29,6 @@
 				$this->table_Users();
 				$this->table_User_Metas();
 			}
-		}
-
-		public function save_Site_Config(){
-			update_ENV('title', $this->input->post('title'));
-			update_ENV('tag', $this->input->post('tag'));
 		}
 
 		public function save_Admin(){

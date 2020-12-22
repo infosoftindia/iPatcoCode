@@ -4,3 +4,4 @@
 /system/
 /phpstorm.php
 /composer.lock
+.env

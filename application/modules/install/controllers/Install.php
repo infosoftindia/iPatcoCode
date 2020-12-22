@@ -5,6 +5,10 @@ class Install extends MX_Controller {
 
 	public function index(){
 		// Step 1
+		$protocol = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
+		$url = $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+		$url = str_replace('install', '', $url);
+		update_ENV('url', $url);
 		$this->load->model('Install_model');
 		$this->form_validation->set_rules('hostname', 'Host Name', 'required');
 		$this->form_validation->set_rules('username', 'Username', 'required');
@@ -14,6 +18,7 @@ class Install extends MX_Controller {
 		if ($this->form_validation->run() === FALSE){
 			$this->load->view('step1');
 		} else {
+			$this->writeAutoLoad();
 			$this->Install_model->save_Database_Config();
 			redirect('install/step2');
 		}
@@ -47,6 +52,24 @@ class Install extends MX_Controller {
 		} else {
 			$this->Install_model->save_Admin();
 			redirect(getenv('admin').'/login');
+		}
+	}
+
+	public function writeAutoLoad()
+	{
+		$template_path 	= APPPATH.'modules/install/file/autoload.php';
+		$output_path 	= APPPATH.'config/autoload.php';
+		$autoload = file_get_contents($template_path);
+		$handle = fopen($output_path,'w+');
+		@chmod($output_path,0777);
+		if(is_writable($output_path)) {
+			if(fwrite($handle, $autoload)) {
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return false;
 		}
 	}
 }

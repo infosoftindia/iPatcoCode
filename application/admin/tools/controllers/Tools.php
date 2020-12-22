@@ -5,7 +5,9 @@ class Tools extends MX_Controller {
 
 	public function backup(){
 		auth([121]);
+		$this->load->model('Tools_model');
 		$data['title'] = 'Database Backup';
+		$data['tables'] = $this->Tools_model->get_Tables();
 		$data['page'] = $this->load->view('backup', $data, true);
 		echo modules::run('layouts/layouts/load', $data);
 	}
@@ -31,6 +33,28 @@ class Tools extends MX_Controller {
 		auth([121]);
 		$this->Tools_model->insert();
 		redirectF(getenv('admin').'/tools/seo',['msg', 'Meta added successfully']);
+	}
+
+	public function exportTable()
+	{
+		auth([121]);
+		$this->load->helper('download');
+		$this->load->model('Tools_model');
+		$ext = $this->input->post('file_type');
+		$ext = (($ext == 'txt')?'sql':$ext);
+		$name = 'backup_'.str_replace(' ', '-', getenv('title')).'_'.time();
+		$backup = $this->Tools_model->backUpTables($name);
+		force_download($name.'.'.$ext, $backup);
+	}
+
+	public function exportDatabase()
+	{
+		auth([121]);
+		$this->load->helper('download');
+		$this->load->model('Tools_model');
+		$name = 'full_backup_'.str_replace(' ', '-', getenv('title')).'_'.time().'.sql';
+		$backup = $this->Tools_model->backUpDatabase($name);
+		force_download($name, $backup);
 	}
 	
 }

@@ -41,6 +41,8 @@ $route[$admin.'users/manage'] = 'users/manage';
 $route[$admin.'users/edit/(:num)'] = 'users/edit/$1';
 
 $route[$admin.'tools/backup'] = 'tools/backup';
+$route[$admin.'tools/backup-table']['post'] = 'tools/exportTable';
+$route[$admin.'tools/backup-database']['post'] = 'tools/exportDatabase';
 $route[$admin.'tools/seo'] = 'tools/seo';
 
 $route[$admin.'settings/general'] = 'settings/general';
